@@ -1,8 +1,8 @@
 Package: rater
-Title: Fit Statistical Models of Repeated Categorical Rating Data
-Version: 1.0.0
+Title: Statistical Models of Repeated Categorical Rating Data
+Version: 1.1.0
 Authors@R: c(person("Jeffrey", "Pullin",
-             role = c("aut", "cre"),
+             role = c("aut", "cre", "cph"),
              email = "jeffrey.pullin@gmail.com",
              comment = c(ORCID = "0000-0003-3651-5471")),
              person("Damjan", "Vukcevic",
@@ -24,18 +24,20 @@ Biarch: true
 Depends: R (>= 3.4.0)
 Imports: methods, Rcpp (>= 0.12.0), rstan (>= 2.19.2), rstantools (>=
         2.0.0), RcppParallel (>= 5.0.1), ggplot2 (>= 2.2.1), rlang (>
-        0.2.0)
+        0.2.0), loo (> 2.0.0)
 LinkingTo: BH (>= 1.66.0), Rcpp (>= 0.12.0), RcppEigen (>= 0.3.3.3.0),
         rstan (>= 2.18.1), StanHeaders (>= 2.18.0), RcppParallel (>=
         5.0.1)
 RoxygenNote: 7.1.1
-Suggests: testthat, knitr, rmarkdown, covr
+Suggests: coda, testthat, knitr, rmarkdown, covr
 VignetteBuilder: knitr
 SystemRequirements: GNU make
+Config/testthat/edition: 3
 NeedsCompilation: yes
-Packaged: 2020-09-07 09:28:15 UTC; jeffreypullin
-Author: Jeffrey Pullin [aut, cre] (<https://orcid.org/0000-0003-3651-5471>),
+Packaged: 2021-03-12 02:49:32 UTC; jeffreypullin
+Author: Jeffrey Pullin [aut, cre, cph]
+    (<https://orcid.org/0000-0003-3651-5471>),
   Damjan Vukcevic [aut] (<https://orcid.org/0000-0001-7780-9586>)
 Maintainer: Jeffrey Pullin <jeffrey.pullin@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-09-15 08:40:03 UTC
+Date/Publication: 2021-03-14 15:50:07 UTC

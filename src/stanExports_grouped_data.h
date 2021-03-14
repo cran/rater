@@ -46,7 +46,7 @@ private:
         std::vector<double> tally;
         std::vector<std::vector<int> > key;
         vector_d alpha;
-        std::vector<vector_d> beta;
+        std::vector<std::vector<vector_d> > beta;
 public:
     model_grouped_data(stan::io::var_context& context__,
         std::ostream* pstream__ = 0)
@@ -143,21 +143,28 @@ public:
             check_greater_or_equal(function__, "alpha", alpha, 0);
             current_statement_begin__ = 8;
             validate_non_negative_index("beta", "K", K);
+            validate_non_negative_index("beta", "J", J);
             validate_non_negative_index("beta", "K", K);
-            context__.validate_dims("data initialization", "beta", "vector_d", context__.to_vec(K,K));
-            beta = std::vector<Eigen::Matrix<double, Eigen::Dynamic, 1> >(K, Eigen::Matrix<double, Eigen::Dynamic, 1>(K));
+            context__.validate_dims("data initialization", "beta", "vector_d", context__.to_vec(J,K,K));
+            beta = std::vector<std::vector<Eigen::Matrix<double, Eigen::Dynamic, 1> > >(J, std::vector<Eigen::Matrix<double, Eigen::Dynamic, 1> >(K, Eigen::Matrix<double, Eigen::Dynamic, 1>(K)));
             vals_r__ = context__.vals_r("beta");
             pos__ = 0;
             size_t beta_j_1_max__ = K;
-            size_t beta_k_0_max__ = K;
+            size_t beta_k_0_max__ = J;
+            size_t beta_k_1_max__ = K;
             for (size_t j_1__ = 0; j_1__ < beta_j_1_max__; ++j_1__) {
-                for (size_t k_0__ = 0; k_0__ < beta_k_0_max__; ++k_0__) {
-                    beta[k_0__](j_1__) = vals_r__[pos__++];
+                for (size_t k_1__ = 0; k_1__ < beta_k_1_max__; ++k_1__) {
+                    for (size_t k_0__ = 0; k_0__ < beta_k_0_max__; ++k_0__) {
+                        beta[k_0__][k_1__](j_1__) = vals_r__[pos__++];
+                    }
                 }
             }
-            size_t beta_i_0_max__ = K;
+            size_t beta_i_0_max__ = J;
+            size_t beta_i_1_max__ = K;
             for (size_t i_0__ = 0; i_0__ < beta_i_0_max__; ++i_0__) {
-                check_greater_or_equal(function__, "beta[i_0__]", beta[i_0__], 0);
+                for (size_t i_1__ = 0; i_1__ < beta_i_1_max__; ++i_1__) {
+                    check_greater_or_equal(function__, "beta[i_0__][i_1__]", beta[i_0__][i_1__], 0);
+                }
             }
             // initialize transformed data variables
             // execute transformed data statements
@@ -334,7 +341,7 @@ public:
                 current_statement_begin__ = 32;
                 for (int k = 1; k <= K; ++k) {
                     current_statement_begin__ = 33;
-                    lp_accum__.add(dirichlet_log<propto__>(get_base1(get_base1(theta, j, "theta", 1), k, "theta", 2), get_base1(beta, k, "beta", 1)));
+                    lp_accum__.add(dirichlet_log<propto__>(get_base1(get_base1(theta, j, "theta", 1), k, "theta", 2), get_base1(get_base1(beta, j, "beta", 1), k, "beta", 2)));
                 }
             }
             current_statement_begin__ = 38;

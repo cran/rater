@@ -17,7 +17,7 @@ data {
   int<lower=1, upper=J> jj[N];  // annotator for annotation n
   int<lower=0, upper=K> y[N];   // annotation for observation n
   vector<lower=0>[K] alpha;     // prior for pi
-  vector<lower=0>[K] beta[K];   // prior for theta
+  vector<lower=0>[K] beta[J, K];   // prior for theta
 }
 
 parameters {
@@ -45,12 +45,19 @@ model {
   for (j in 1:J) {
     for (k in 1:K) {
        //prior on theta
-       theta[j, k] ~ dirichlet(beta[k]);
+       theta[j, k] ~ dirichlet(beta[j, k]);
     }
   }
 
   for (i in 1:I) {
     // log_sum_exp used for numerical stability
     target += log_sum_exp(log_p_z[i]);
+  }
+}
+
+generated quantities {
+  vector[I] log_lik;
+  for (i in 1:I) {
+    log_lik[i] = log_sum_exp(log_p_z[i]);
   }
 }
